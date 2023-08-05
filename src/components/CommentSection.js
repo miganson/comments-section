@@ -5,8 +5,10 @@ import data from "./../data/data.json";
 
 function CommentSection() {
   // Load comments from localStorage or use default data
-  const initialComments =
-    JSON.parse(localStorage.getItem("comments")) || data.comments;
+  const savedComments = localStorage.getItem("comments");
+  const initialComments = savedComments
+    ? JSON.parse(savedComments)
+    : data.comments;
   const [comments, setComments] = useState(initialComments);
 
   useEffect(() => {
@@ -32,7 +34,7 @@ function CommentSection() {
   };
 
   const handleUpvoteComment = (id) => {
-    console.log('Upvoting comment with ID:', id);
+    console.log("Upvoting comment with ID:", id);
     setComments(
       comments.map((comment) =>
         comment.id === id ? { ...comment, score: comment.score + 1 } : comment

@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 
 function Reply({ reply, onUpvote, onDownvote, onDelete }) {
+  console.log(reply); // Add this line
+
   const [content, setContent] = useState(reply.content);
   const [isEditing, setIsEditing] = useState(false);
 
@@ -9,6 +11,10 @@ function Reply({ reply, onUpvote, onDownvote, onDelete }) {
   const handleDelete = () => {
     onDelete(reply.id);
   };
+
+  const username = reply.user.username || "Anonymous";
+  const userImage = reply.user.image ? reply.user.image.png : "avatars/anon.png";
+
 
   return (
     <div>
@@ -29,8 +35,8 @@ function Reply({ reply, onUpvote, onDownvote, onDelete }) {
       </button>
       <button onClick={handleDelete}>Delete</button>
       <p>Replying to: {reply.replyingTo}</p>
-      <p>Posted by: {reply.user.username}</p>
-      <img src={reply.user.image.png} alt={reply.user.username} />
+      <p>Posted by: {username}</p>
+      <img src={userImage} alt={username} />
     </div>
   );
 }

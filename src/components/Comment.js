@@ -10,6 +10,11 @@ function Comment({ comment, onUpvote, onDownvote, onDelete }) {
     onDelete(comment.id);
   };
 
+  const username = comment.user.username || "Anonymous";
+  const userImage = comment.user.image
+    ? comment.user.image.png
+    : "avatars/anon.png";
+
   return (
     <div>
       {isEditing ? (
@@ -28,8 +33,8 @@ function Comment({ comment, onUpvote, onDownvote, onDelete }) {
         {isEditing ? "Save" : "Edit"}
       </button>
       <button onClick={handleDelete}>Delete</button>
-      <p>Posted by: {comment.user.username}</p>
-      <img src={comment.user.image.png} alt={comment.user.username} />
+      <p>Posted by: {username}</p>
+      <img src={userImage} alt={username} />
     </div>
   );
 }
