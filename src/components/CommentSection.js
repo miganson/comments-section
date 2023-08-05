@@ -10,6 +10,8 @@ function CommentSection() {
     ? JSON.parse(savedComments)
     : data.comments;
   const [comments, setComments] = useState(initialComments);
+  const [newComment, setNewComment] = useState("");
+  const [newReply, setNewReply] = useState("");
 
   useEffect(() => {
     // Save comments to localStorage whenever they change
@@ -84,8 +86,54 @@ function CommentSection() {
     );
   };
 
+  const handleAddComment = (content) => {
+    setComments([
+      ...comments,
+      {
+        id: Date.now(), // Unique ID
+        content,
+        createdAt: new Date().toISOString(),
+        score: 0,
+        user: data.currentUser, // Assuming data.json contains the current user
+        replies: [],
+      },
+    ]);
+  };
+
+  const handleAddReply = (commentId, content) => {
+    setComments(
+      comments.map((comment) =>
+        comment.id === commentId
+          ? {
+              ...comment,
+              replies: [
+                ...comment.replies,
+                {
+                  id: Date.now(),
+                  content,
+                  createdAt: new Date().toISOString(),
+                  score: 0,
+                  replyingTo: comment.user.username,
+                  user: data.currentUser,
+                },
+              ],
+            }
+          : comment
+      )
+    );
+  };
+
   return (
     <div>
+      <div>
+        <input
+          type="text"
+          placeholder="Write a comment..."
+          value={newComment}
+          onChange={(e) => setNewComment(e.target.value)}
+        />
+        <button onClick={() => handleAddComment(newComment)}>Post</button>
+      </div>
       {comments.map((comment) => (
         <div key={comment.id}>
           <Comment
@@ -94,6 +142,15 @@ function CommentSection() {
             onDownvote={() => handleDownvoteComment(comment.id)}
             onDelete={handleDeleteComment}
           />
+          <input
+            type="text"
+            placeholder="Write a reply..."
+            value={newReply}
+            onChange={(e) => setNewReply(e.target.value)}
+          />
+          <button onClick={() => handleAddReply(comment.id, newReply)}>
+            Reply
+          </button>
           {comment.replies.map((reply) => (
             <Reply
               key={reply.id}
