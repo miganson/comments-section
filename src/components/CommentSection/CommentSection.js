@@ -12,6 +12,7 @@ function CommentSection() {
   const [comments, setComments] = useState(initialComments);
   const [newComment, setNewComment] = useState("");
   const [newReply, setNewReply] = useState("");
+  const [replyTo, setReplyTo] = useState(null); // Add this line
 
   // Create a ref for each comment reply input
   const replyRefs = useRef(comments.map(() => createRef()));
@@ -112,6 +113,23 @@ function CommentSection() {
           : comment
       )
     );
+    setReplyTo(null); // Clear replyTo after adding the reply
+    setNewReply(""); // Clear the reply input field after adding the reply
+  };
+
+  const handleAddComment = (content) => {
+    setComments([
+      ...comments,
+      {
+        id: Date.now(),
+        content,
+        createdAt: new Date().toISOString(),
+        score: 0,
+        user: data.currentUser,
+        replies: [],
+      },
+    ]);
+    setNewComment(""); // Clear the input field after adding the comment
   };
 
   return (
@@ -124,11 +142,8 @@ function CommentSection() {
             onDownvote={() => handleDownvoteComment(comment.id)}
             onDelete={handleDeleteComment}
             onReply={() => {
-              // Smooth scroll to the reply input
-              replyRefs.current[index].current?.scrollIntoView({
-                behavior: "smooth",
-                block: "center",
-              });
+              setReplyTo(comment.id); // Set replyTo when the Reply button is clicked
+              // ... Existing code ...
             }}
           />
           <div className="replies-container">
@@ -141,19 +156,34 @@ function CommentSection() {
                 onDelete={() => handleDeleteReply(comment.id, reply.id)}
               />
             ))}
-            <input
-              type="text"
-              placeholder="Write a reply..."
-              value={newReply}
-              onChange={(e) => setNewReply(e.target.value)}
-              ref={replyRefs.current[index]} // use ref here
-            />
-            <button onClick={() => handleAddReply(comment.id, newReply)}>
-              Reply
-            </button>
+            {replyTo === comment.id && ( // Only show this if the Reply button was clicked for this comment
+              <>
+                <input
+                  type="text"
+                  placeholder="Write a reply..."
+                  value={newReply}
+                  onChange={(e) => setNewReply(e.target.value)}
+                  ref={replyRefs.current[index]} // use ref here
+                />
+                <button onClick={() => handleAddReply(comment.id, newReply)}>
+                  Reply
+                </button>
+              </>
+            )}
           </div>
         </div>
       ))}
+      <div className="new-comment-container">
+        <input
+          type="text"
+          placeholder="Write a comment..."
+          value={newComment}
+          onChange={(e) => setNewComment(e.target.value)}
+        />
+        <button onClick={() => handleAddComment(newComment)}>
+          Post Comment
+        </button>
+      </div>
     </div>
   );
 }

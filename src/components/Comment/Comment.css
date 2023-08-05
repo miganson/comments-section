@@ -8,10 +8,22 @@
   border-radius: 10px;
 }
 
-.comment .actions button.reply {
+.comment .actions button.reply, .comment .actions button.delete {
   position: absolute;
   top: 10px;
+  border-radius: 10px;
+  border: none;
+  background-color: #3f467d;
+  color: white;
+  padding: 5px 10px;
+}
+
+.comment .actions button.reply {
   right: 10px;
+}
+
+.comment .actions button.delete {
+  right: 60px; 
 }
 
 .comment .vote-buttons div {
@@ -49,12 +61,6 @@
 
 .comment .actions {
   display: flex;
-}
-
-.comment .reply {
-  position: absolute;
-  right: 10px;
-  top: 10px;
 }
 
 .timestamp {

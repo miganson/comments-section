@@ -1,10 +1,10 @@
-import React, { useState, useRef } from "react";
+import React, { useState } from "react";
 import "./Comment.css";
 
 function Comment({ comment, onUpvote, onDownvote, onDelete, onReply }) {
   const [content, setContent] = useState(comment.content);
   const [isEditing, setIsEditing] = useState(false);
-  const replyRef = useRef(null);
+  const currentUser = "yoda"; // replace this with actual current user
 
   const handleEdit = () => setIsEditing(true);
   const handleSave = () => setIsEditing(false);
@@ -17,6 +17,7 @@ function Comment({ comment, onUpvote, onDownvote, onDelete, onReply }) {
     ? comment.user.image.png
     : "avatars/anon.png";
 
+  const isCurrentUser = currentUser === username;
   function timeAgo(timestamp) {
     const date = new Date(timestamp); // Convert to Date object
     const secondsAgo = (Date.now() - date.getTime()) / 1000;
@@ -70,14 +71,24 @@ function Comment({ comment, onUpvote, onDownvote, onDelete, onReply }) {
           <p>{content}</p>
         )}
         <div className="actions">
-          <button onClick={isEditing ? handleSave : handleEdit}>
-            {isEditing ? "Save" : "Edit"}
-          </button>
-          <button onClick={handleDelete}>Delete</button>
+          {isCurrentUser ? (
+            <>
+              <button className="delete" onClick={handleDelete}>
+                Delete
+              </button>
+              <button
+                className="reply"
+                onClick={isEditing ? handleSave : handleEdit}
+              >
+                {isEditing ? "Save" : "Edit"}
+              </button>
+            </>
+          ) : (
+            <button className="reply" onClick={handleReply}>
+              Reply
+            </button>
+          )}
         </div>
-        <button className="reply" onClick={handleReply}>
-          Reply
-        </button>
       </div>
     </div>
   );
