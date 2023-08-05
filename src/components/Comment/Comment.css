@@ -1,8 +1,3 @@
-.comment-section {
-  width: 70%;
-  margin: 0 auto;
-}
-
 .comment {
   border: 2px solid #ccc;
   display: flex;
@@ -20,15 +15,15 @@
   margin-right: 10px;
 }
 
-.comment .vote-buttons button {
-  background: none;
-  border: none;
-  font-size: 16px;
-  cursor: pointer;
+.comment .content-area {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
 }
 
-.comment .vote-buttons p {
-  margin: 5px 0;
+.comment .user-info {
+  display: flex;
+  align-items: center;
 }
 
 .comment img {
@@ -36,11 +31,6 @@
   height: 30px;
   border-radius: 15px;
   margin-right: 10px;
-}
-
-.comment .info {
-  display: flex;
-  align-items: center;
 }
 
 .comment .info p {
@@ -54,6 +44,10 @@
 
 .comment input[type="text"] {
   flex: 1; /* Ensuring the input field takes up remaining space when editing */
+}
+
+.actions {
+  display: flex;
 }
 
 .replies-container {

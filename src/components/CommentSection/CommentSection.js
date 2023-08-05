@@ -124,7 +124,7 @@ function CommentSection() {
   };
 
   return (
-    <div>
+    <div className="comment-section-container">
       <div>
         <input
           type="text"

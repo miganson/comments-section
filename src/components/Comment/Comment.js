@@ -30,29 +30,31 @@ function Comment({ comment, onUpvote, onDownvote, onDelete }) {
     <div className="comment">
       <div className="vote-buttons">
         <button onClick={onUpvote}>+</button>
-        <p>Score: {comment.score}</p>
+        <p>{comment.score}</p>
         <button onClick={onDownvote}>-</button>
       </div>
-      <img src={userImage} alt={username} />
-      <div className="info">
-        <p>{username}</p>
-        <p>
-          Posted {timeAgo(comment.createdAt)} by: {username}
-        </p>
+      <div className="content-area">
+        <div className="user-info">
+          <img src={userImage} alt={username} />
+          <p>{username}</p>
+          <p>Posted {timeAgo(comment.createdAt)}</p>
+        </div>
+        {isEditing ? (
+          <input
+            type="text"
+            value={content}
+            onChange={(e) => setContent(e.target.value)}
+          />
+        ) : (
+          <p>{content}</p>
+        )}
+        <div className="actions">
+          <button onClick={isEditing ? handleSave : handleEdit}>
+            {isEditing ? "Save" : "Edit"}
+          </button>
+          <button onClick={handleDelete}>Delete</button>
+        </div>
       </div>
-      {isEditing ? (
-        <input
-          type="text"
-          value={content}
-          onChange={(e) => setContent(e.target.value)}
-        />
-      ) : (
-        <p>{content}</p>
-      )}
-      <button onClick={isEditing ? handleSave : handleEdit}>
-        {isEditing ? "Save" : "Edit"}
-      </button>
-      <button onClick={handleDelete}>Delete</button>
     </div>
   );
 }
