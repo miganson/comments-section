@@ -1,12 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 
-function Reply({ reply, onDelete }) {
-  const [score, setScore] = useState(reply.score);
+function Reply({ reply, onUpvote, onDownvote, onDelete }) {
   const [content, setContent] = useState(reply.content);
   const [isEditing, setIsEditing] = useState(false);
 
-  const handleUpvote = () => setScore(score + 1);
-  const handleDownvote = () => setScore(score - 1);
   const handleEdit = () => setIsEditing(true);
   const handleSave = () => setIsEditing(false);
   const handleDelete = () => {
@@ -24,11 +21,11 @@ function Reply({ reply, onDelete }) {
       ) : (
         <p>{content}</p>
       )}
-      <p>Score: {score}</p>
-      <button onClick={handleUpvote}>Upvote</button>
-      <button onClick={handleDownvote}>Downvote</button>
+      <p>Score: {reply.score}</p>
+      <button onClick={onUpvote}>Upvote</button>
+      <button onClick={onDownvote}>Downvote</button>
       <button onClick={isEditing ? handleSave : handleEdit}>
-        {isEditing ? 'Save' : 'Edit'}
+        {isEditing ? "Save" : "Edit"}
       </button>
       <button onClick={handleDelete}>Delete</button>
       <p>Replying to: {reply.replyingTo}</p>

@@ -4,11 +4,15 @@ import Reply from "./Reply";
 import data from "./../data/data.json";
 
 function CommentSection() {
-  const [comments, setComments] = useState([]);
+  // Load comments from localStorage or use default data
+  const initialComments =
+    JSON.parse(localStorage.getItem("comments")) || data.comments;
+  const [comments, setComments] = useState(initialComments);
 
   useEffect(() => {
-    setComments(data.comments);
-  }, []);
+    // Save comments to localStorage whenever they change
+    localStorage.setItem("comments", JSON.stringify(comments));
+  }, [comments]);
 
   const handleDeleteComment = (id) => {
     setComments(comments.filter((comment) => comment.id !== id));
@@ -27,22 +31,78 @@ function CommentSection() {
     );
   };
 
+  const handleUpvoteComment = (id) => {
+    console.log('Upvoting comment with ID:', id);
+    setComments(
+      comments.map((comment) =>
+        comment.id === id ? { ...comment, score: comment.score + 1 } : comment
+      )
+    );
+  };
+
+  const handleDownvoteComment = (id) => {
+    setComments(
+      comments.map((comment) =>
+        comment.id === id ? { ...comment, score: comment.score - 1 } : comment
+      )
+    );
+  };
+
+  const handleUpvoteReply = (commentId, replyId) => {
+    setComments(
+      comments.map((comment) =>
+        comment.id === commentId
+          ? {
+              ...comment,
+              replies: comment.replies.map((reply) =>
+                reply.id === replyId
+                  ? { ...reply, score: reply.score + 1 }
+                  : reply
+              ),
+            }
+          : comment
+      )
+    );
+  };
+
+  const handleDownvoteReply = (commentId, replyId) => {
+    setComments(
+      comments.map((comment) =>
+        comment.id === commentId
+          ? {
+              ...comment,
+              replies: comment.replies.map((reply) =>
+                reply.id === replyId
+                  ? { ...reply, score: reply.score - 1 }
+                  : reply
+              ),
+            }
+          : comment
+      )
+    );
+  };
+
   return (
     <div>
-      {comments
-        .sort((a, b) => b.score - a.score)
-        .map((comment) => (
-          <div key={comment.id}>
-            <Comment comment={comment} onDelete={handleDeleteComment} />
-            {comment.replies.map((reply) => (
-              <Reply
-                key={reply.id}
-                reply={reply}
-                onDelete={() => handleDeleteReply(comment.id, reply.id)}
-              />
-            ))}
-          </div>
-        ))}
+      {comments.map((comment) => (
+        <div key={comment.id}>
+          <Comment
+            comment={comment}
+            onUpvote={() => handleUpvoteComment(comment.id)}
+            onDownvote={() => handleDownvoteComment(comment.id)}
+            onDelete={handleDeleteComment}
+          />
+          {comment.replies.map((reply) => (
+            <Reply
+              key={reply.id}
+              reply={reply}
+              onUpvote={() => handleUpvoteReply(comment.id, reply.id)}
+              onDownvote={() => handleDownvoteReply(comment.id, reply.id)}
+              onDelete={() => handleDeleteReply(comment.id, reply.id)}
+            />
+          ))}
+        </div>
+      ))}
     </div>
   );
 }

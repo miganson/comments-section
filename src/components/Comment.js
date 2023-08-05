@@ -1,12 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 
-function Comment({ comment, onDelete }) {
-  const [score, setScore] = useState(comment.score);
+function Comment({ comment, onUpvote, onDownvote, onDelete }) {
   const [content, setContent] = useState(comment.content);
   const [isEditing, setIsEditing] = useState(false);
 
-  const handleUpvote = () => setScore(score + 1);
-  const handleDownvote = () => setScore(score - 1);
   const handleEdit = () => setIsEditing(true);
   const handleSave = () => setIsEditing(false);
   const handleDelete = () => {
@@ -24,11 +21,11 @@ function Comment({ comment, onDelete }) {
       ) : (
         <p>{content}</p>
       )}
-      <p>Score: {score}</p>
-      <button onClick={handleUpvote}>Upvote</button>
-      <button onClick={handleDownvote}>Downvote</button>
+      <p>Score: {comment.score}</p>
+      <button onClick={onUpvote}>Upvote</button>
+      <button onClick={onDownvote}>Downvote</button>
       <button onClick={isEditing ? handleSave : handleEdit}>
-        {isEditing ? 'Save' : 'Edit'}
+        {isEditing ? "Save" : "Edit"}
       </button>
       <button onClick={handleDelete}>Delete</button>
       <p>Posted by: {comment.user.username}</p>
