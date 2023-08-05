@@ -4,6 +4,7 @@ import "./Reply.css";
 function Reply({ reply, onUpvote, onDownvote, onDelete }) {
   const [content, setContent] = useState(reply.content);
   const [isEditing, setIsEditing] = useState(false);
+  const currentUser = "yoda"; // replace this with actual current user
 
   const handleEdit = () => setIsEditing(true);
   const handleSave = () => setIsEditing(false);
@@ -15,6 +16,8 @@ function Reply({ reply, onUpvote, onDownvote, onDelete }) {
   const userImage = reply.user.image
     ? reply.user.image.png
     : "avatars/anon.png";
+
+  const isCurrentUser = currentUser === username;
 
   function timeAgo(timestamp) {
     const date = new Date(timestamp); // Convert to Date object
@@ -65,10 +68,19 @@ function Reply({ reply, onUpvote, onDownvote, onDelete }) {
           <p>{content}</p>
         )}
         <div className="actions">
-          <button onClick={isEditing ? handleSave : handleEdit}>
-            {isEditing ? "Save" : "Edit"}
-          </button>
-          <button onClick={handleDelete}>Delete</button>
+          {isCurrentUser ? (
+            <>
+              <button className="delete" onClick={handleDelete}>
+                Delete
+              </button>
+              <button
+                className="reply"
+                onClick={isEditing ? handleSave : handleEdit}
+              >
+                {isEditing ? "Save" : "Edit"}
+              </button>
+            </>
+          ) : null}
         </div>
       </div>
     </div>
