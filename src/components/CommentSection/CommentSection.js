@@ -1,11 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef, createRef } from "react";
 import Comment from "../Comment/Comment";
 import Reply from "../Reply/Reply";
 import data from "../../data/data.json";
 import "./CommentSection.css";
 
 function CommentSection() {
-  // Load comments from localStorage or use default data
   const savedComments = localStorage.getItem("comments");
   const initialComments = savedComments
     ? JSON.parse(savedComments)
@@ -14,9 +13,15 @@ function CommentSection() {
   const [newComment, setNewComment] = useState("");
   const [newReply, setNewReply] = useState("");
 
+  // Create a ref for each comment reply input
+  const replyRefs = useRef(comments.map(() => createRef()));
+
   useEffect(() => {
     // Save comments to localStorage whenever they change
     localStorage.setItem("comments", JSON.stringify(comments));
+
+    // update refs
+    replyRefs.current = replyRefs.current.slice(0, comments.length);
   }, [comments]);
 
   const handleDeleteComment = (id) => {
@@ -86,20 +91,6 @@ function CommentSection() {
     );
   };
 
-  const handleAddComment = (content) => {
-    setComments([
-      ...comments,
-      {
-        id: Date.now(), // Unique ID
-        content,
-        createdAt: Date.now(),
-        score: 0,
-        user: data.currentUser, // Assuming data.json contains the current user
-        replies: [],
-      },
-    ]);
-  };
-
   const handleAddReply = (commentId, content) => {
     setComments(
       comments.map((comment) =>
@@ -125,33 +116,22 @@ function CommentSection() {
 
   return (
     <div className="comment-section-container">
-      <div>
-        <input
-          type="text"
-          placeholder="Write a comment..."
-          value={newComment}
-          onChange={(e) => setNewComment(e.target.value)}
-        />
-        <button onClick={() => handleAddComment(newComment)}>Post</button>
-      </div>
-      {comments.map((comment) => (
+      {comments.map((comment, index) => (
         <div key={comment.id} className="comment-section">
           <Comment
             comment={comment}
             onUpvote={() => handleUpvoteComment(comment.id)}
             onDownvote={() => handleDownvoteComment(comment.id)}
             onDelete={handleDeleteComment}
+            onReply={() => {
+              // Smooth scroll to the reply input
+              replyRefs.current[index].current?.scrollIntoView({
+                behavior: "smooth",
+                block: "center",
+              });
+            }}
           />
           <div className="replies-container">
-            <input
-              type="text"
-              placeholder="Write a reply..."
-              value={newReply}
-              onChange={(e) => setNewReply(e.target.value)}
-            />
-            <button onClick={() => handleAddReply(comment.id, newReply)}>
-              Reply
-            </button>
             {comment.replies.map((reply) => (
               <Reply
                 key={reply.id}
@@ -161,6 +141,16 @@ function CommentSection() {
                 onDelete={() => handleDeleteReply(comment.id, reply.id)}
               />
             ))}
+            <input
+              type="text"
+              placeholder="Write a reply..."
+              value={newReply}
+              onChange={(e) => setNewReply(e.target.value)}
+              ref={replyRefs.current[index]} // use ref here
+            />
+            <button onClick={() => handleAddReply(comment.id, newReply)}>
+              Reply
+            </button>
           </div>
         </div>
       ))}
