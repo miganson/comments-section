@@ -1,6 +1,6 @@
 import React from "react";
 import "./App.css";
-import CommentSection from "./components/CommentSection";
+import CommentSection from "./components/CommentSection/CommentSection";
 
 function App() {
   return (

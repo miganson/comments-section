@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
-import Comment from "./Comment";
-import Reply from "./Reply";
-import data from "./../data/data.json";
+import Comment from "../Comment/Comment";
+import Reply from "../Reply/Reply";
+import data from "../../data/data.json";
+import "./CommentSection.css";
 
 function CommentSection() {
   // Load comments from localStorage or use default data
@@ -135,31 +136,33 @@ function CommentSection() {
         <button onClick={() => handleAddComment(newComment)}>Post</button>
       </div>
       {comments.map((comment) => (
-        <div key={comment.id}>
+        <div key={comment.id} className="comment-section">
           <Comment
             comment={comment}
             onUpvote={() => handleUpvoteComment(comment.id)}
             onDownvote={() => handleDownvoteComment(comment.id)}
             onDelete={handleDeleteComment}
           />
-          <input
-            type="text"
-            placeholder="Write a reply..."
-            value={newReply}
-            onChange={(e) => setNewReply(e.target.value)}
-          />
-          <button onClick={() => handleAddReply(comment.id, newReply)}>
-            Reply
-          </button>
-          {comment.replies.map((reply) => (
-            <Reply
-              key={reply.id}
-              reply={reply}
-              onUpvote={() => handleUpvoteReply(comment.id, reply.id)}
-              onDownvote={() => handleDownvoteReply(comment.id, reply.id)}
-              onDelete={() => handleDeleteReply(comment.id, reply.id)}
+          <div className="replies-container">
+            <input
+              type="text"
+              placeholder="Write a reply..."
+              value={newReply}
+              onChange={(e) => setNewReply(e.target.value)}
             />
-          ))}
+            <button onClick={() => handleAddReply(comment.id, newReply)}>
+              Reply
+            </button>
+            {comment.replies.map((reply) => (
+              <Reply
+                key={reply.id}
+                reply={reply}
+                onUpvote={() => handleUpvoteReply(comment.id, reply.id)}
+                onDownvote={() => handleDownvoteReply(comment.id, reply.id)}
+                onDelete={() => handleDeleteReply(comment.id, reply.id)}
+              />
+            ))}
+          </div>
         </div>
       ))}
     </div>

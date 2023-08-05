@@ -1,19 +1,21 @@
 import React, { useState } from "react";
+import "./Reply.css";
 
-function Comment({ comment, onUpvote, onDownvote, onDelete }) {
-  const [content, setContent] = useState(comment.content);
+function Reply({ reply, onUpvote, onDownvote, onDelete }) {
+  console.log(reply); // Add this line
+
+  const [content, setContent] = useState(reply.content);
   const [isEditing, setIsEditing] = useState(false);
 
   const handleEdit = () => setIsEditing(true);
   const handleSave = () => setIsEditing(false);
   const handleDelete = () => {
-    onDelete(comment.id);
+    onDelete(reply.id);
   };
 
-  const username = comment.user.username || "Anonymous";
-  const userImage = comment.user.image
-    ? comment.user.image.png
-    : "avatars/anon.png";
+  const username = reply.user.username || "Anonymous";
+  const userImage = reply.user.image ? reply.user.image.png : "avatars/anon.png";
+
 
   return (
     <div>
@@ -26,17 +28,18 @@ function Comment({ comment, onUpvote, onDownvote, onDelete }) {
       ) : (
         <p>{content}</p>
       )}
-      <p>Score: {comment.score}</p>
+      <p>Score: {reply.score}</p>
       <button onClick={onUpvote}>Upvote</button>
       <button onClick={onDownvote}>Downvote</button>
       <button onClick={isEditing ? handleSave : handleEdit}>
         {isEditing ? "Save" : "Edit"}
       </button>
       <button onClick={handleDelete}>Delete</button>
+      <p>Replying to: {reply.replyingTo}</p>
       <p>Posted by: {username}</p>
       <img src={userImage} alt={username} />
     </div>
   );
 }
 
-export default Comment;
+export default Reply;
