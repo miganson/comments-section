@@ -10,7 +10,22 @@ function CommentSection() {
     setComments(data.comments);
   }, []);
 
-  // Other functions to handle CRUD operations...
+  const handleDeleteComment = (id) => {
+    setComments(comments.filter((comment) => comment.id !== id));
+  };
+
+  const handleDeleteReply = (commentId, replyId) => {
+    setComments(
+      comments.map((comment) =>
+        comment.id === commentId
+          ? {
+              ...comment,
+              replies: comment.replies.filter((reply) => reply.id !== replyId),
+            }
+          : comment
+      )
+    );
+  };
 
   return (
     <div>
@@ -18,9 +33,13 @@ function CommentSection() {
         .sort((a, b) => b.score - a.score)
         .map((comment) => (
           <div key={comment.id}>
-            <Comment comment={comment} />
+            <Comment comment={comment} onDelete={handleDeleteComment} />
             {comment.replies.map((reply) => (
-              <Reply key={reply.id} reply={reply} />
+              <Reply
+                key={reply.id}
+                reply={reply}
+                onDelete={() => handleDeleteReply(comment.id, reply.id)}
+              />
             ))}
           </div>
         ))}
