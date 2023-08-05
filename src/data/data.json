@@ -1,0 +1,63 @@
+{
+  "currentUser": {
+    "image": {
+      "png": "avatars/yoda.png"
+    },
+    "username": "yoda"
+  },
+  "comments": [
+    {
+      "id": 1,
+      "content": "...",
+      "createdAt": "2022-04-10T13:49:51.141Z",
+      "score": 12,
+      "user": {
+        "image": {
+          "png": "avatars/leiaskywalker.png"
+        },
+        "username": "leiaskywalker"
+      },
+      "replies": []
+    },
+    {
+      "id": 2,
+      "content": "...",
+      "createdAt": "2022-05-14T13:49:51.141Z",
+      "score": 5,
+      "user": {
+        "image": {
+          "png": "avatars/lukeskywalker.png"
+        },
+        "username": "lukeskywalker"
+      },
+      "replies": [
+        {
+          "id": 3,
+          "content": "...",
+          "createdAt": "2022-06-01T13:49:51.141Z",
+          "score": 4,
+          "replyingTo": "lukeskywalker",
+          "user": {
+            "image": {
+              "png": "avatars/vader.png"
+            },
+            "username": "vader"
+          }
+        },
+        {
+          "id": 4,
+          "content": "...",
+          "createdAt": "2022-06-02T13:49:51.141Z",
+          "score": 2,
+          "replyingTo": "vader",
+          "user": {
+            "image": {
+              "png": "avatars/yoda.png"
+            },
+            "username": "yoda"
+          }
+        }
+      ]
+    }
+  ]
+}
