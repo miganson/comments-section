@@ -58,7 +58,7 @@ function Comment({ comment, onUpvote, onDownvote, onDelete, onReply }) {
         <div className="user-info">
           <img src={userImage} alt={username} />
           <p>{username}</p>
-          <p>{timeAgo(comment.createdAt)}</p>
+          <p className="timestamp">{timeAgo(comment.createdAt)}</p>
         </div>
         {isEditing ? (
           <input

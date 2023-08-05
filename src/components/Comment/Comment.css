@@ -43,10 +43,6 @@
   margin: 0;
 }
 
-.comment p {
-  flex: 1; /* Ensuring the comment text takes up remaining space */
-}
-
 .comment input[type="text"] {
   flex: 1; /* Ensuring the input field takes up remaining space when editing */
 }
@@ -59,4 +55,8 @@
   position: absolute;
   right: 10px;
   top: 10px;
+}
+
+.timestamp {
+  flex-grow: 1;
 }

@@ -21,36 +21,56 @@ function Reply({ reply, onUpvote, onDownvote, onDelete }) {
     const secondsAgo = (Date.now() - date.getTime()) / 1000;
 
     if (secondsAgo < 60) return "Just now";
-    if (secondsAgo < 3600) return `${Math.floor(secondsAgo / 60)} minutes ago`;
-    if (secondsAgo < 86400) return `${Math.floor(secondsAgo / 3600)} hours ago`;
-    return `${Math.floor(secondsAgo / 86400)} days ago`;
+    if (secondsAgo < 3600)
+      return `${Math.floor(secondsAgo / 60)} minute${
+        Math.floor(secondsAgo / 60) > 1 ? "s" : ""
+      } ago`;
+    if (secondsAgo < 86400)
+      return `${Math.floor(secondsAgo / 3600)} hour${
+        Math.floor(secondsAgo / 3600) > 1 ? "s" : ""
+      } ago`;
+    if (secondsAgo < 2592000)
+      return `${Math.floor(secondsAgo / 86400)} day${
+        Math.floor(secondsAgo / 86400) > 1 ? "s" : ""
+      } ago`;
+    if (secondsAgo < 31536000)
+      return `${Math.floor(secondsAgo / 2592000)} month${
+        Math.floor(secondsAgo / 2592000) > 1 ? "s" : ""
+      } ago`;
+
+    const years = Math.floor(secondsAgo / 31536000);
+    return `${years} year${years > 1 ? "s" : ""} ago`;
   }
 
   return (
-    <div className="reply">
-      {isEditing ? (
-        <input
-          type="text"
-          value={content}
-          onChange={(e) => setContent(e.target.value)}
-        />
-      ) : (
-        <p>{content}</p>
-      )}
-      <p>
-        Posted {timeAgo(reply.createdAt)} by: {username}
-      </p>
-
-      <p>Score: {reply.score}</p>
-      <button onClick={onUpvote}>Upvote</button>
-      <button onClick={onDownvote}>Downvote</button>
-      <button onClick={isEditing ? handleSave : handleEdit}>
-        {isEditing ? "Save" : "Edit"}
-      </button>
-      <button onClick={handleDelete}>Delete</button>
-      <p>Replying to: {reply.replyingTo}</p>
-      <p>Posted by: {username}</p>
-      <img src={userImage} alt={username} />
+    <div className="comment">
+      <div className="vote-buttons">
+        <div onClick={onUpvote}>+</div>
+        <p>{reply.score}</p>
+        <div onClick={onDownvote}>-</div>
+      </div>
+      <div className="content-area">
+        <div className="user-info">
+          <img src={userImage} alt={username} />
+          <p>{username}</p>
+          <p className="timestamp">{timeAgo(reply.createdAt)}</p>
+        </div>
+        {isEditing ? (
+          <input
+            type="text"
+            value={content}
+            onChange={(e) => setContent(e.target.value)}
+          />
+        ) : (
+          <p>{content}</p>
+        )}
+        <div className="actions">
+          <button onClick={isEditing ? handleSave : handleEdit}>
+            {isEditing ? "Save" : "Edit"}
+          </button>
+          <button onClick={handleDelete}>Delete</button>
+        </div>
+      </div>
     </div>
   );
 }
