@@ -37,7 +37,6 @@ function CommentSection() {
   };
 
   const handleUpvoteComment = (id) => {
-    console.log("Upvoting comment with ID:", id);
     setComments(
       comments.map((comment) =>
         comment.id === id ? { ...comment, score: comment.score + 1 } : comment
@@ -93,7 +92,7 @@ function CommentSection() {
       {
         id: Date.now(), // Unique ID
         content,
-        createdAt: new Date().toISOString(),
+        createdAt: Date.now(),
         score: 0,
         user: data.currentUser, // Assuming data.json contains the current user
         replies: [],

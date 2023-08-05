@@ -16,8 +16,18 @@ function Comment({ comment, onUpvote, onDownvote, onDelete }) {
     ? comment.user.image.png
     : "avatars/anon.png";
 
+    function timeAgo(timestamp) {
+      const date = new Date(timestamp); // Convert to Date object
+      const secondsAgo = (Date.now() - date.getTime()) / 1000;
+    
+      if (secondsAgo < 60) return "Just now";
+      if (secondsAgo < 3600) return `${Math.floor(secondsAgo / 60)} minutes ago`;
+      if (secondsAgo < 86400) return `${Math.floor(secondsAgo / 3600)} hours ago`;
+      return `${Math.floor(secondsAgo / 86400)} days ago`;
+    }
+
   return (
-    <div>
+    <div className="comment">
       {isEditing ? (
         <input
           type="text"
@@ -27,6 +37,9 @@ function Comment({ comment, onUpvote, onDownvote, onDelete }) {
       ) : (
         <p>{content}</p>
       )}
+      <p>
+        Posted {timeAgo(comment.createdAt)} by: {username}
+      </p>
       <p>Score: {comment.score}</p>
       <button onClick={onUpvote}>Upvote</button>
       <button onClick={onDownvote}>Downvote</button>
