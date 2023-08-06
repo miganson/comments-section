@@ -19,7 +19,7 @@ function Comment({ comment, onUpvote, onDownvote, onDelete, onReply }) {
 
   const isCurrentUser = currentUser === username;
   function timeAgo(timestamp) {
-    const date = new Date(timestamp); // Convert to Date object
+    const date = new Date(timestamp);
     const secondsAgo = (Date.now() - date.getTime()) / 1000;
 
     if (secondsAgo < 60) return "Just now";
@@ -80,7 +80,7 @@ function Comment({ comment, onUpvote, onDownvote, onDelete, onReply }) {
                 className="reply"
                 onClick={isEditing ? handleSave : handleEdit}
               >
-                {isEditing ? "Save" : "Edit"}
+                {isEditing ? "Update" : "Edit"}
               </button>
             </>
           ) : (

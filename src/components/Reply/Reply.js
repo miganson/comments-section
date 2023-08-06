@@ -20,7 +20,7 @@ function Reply({ reply, onUpvote, onDownvote, onDelete }) {
   const isCurrentUser = currentUser === username;
 
   function timeAgo(timestamp) {
-    const date = new Date(timestamp); // Convert to Date object
+    const date = new Date(timestamp);
     const secondsAgo = (Date.now() - date.getTime()) / 1000;
 
     if (secondsAgo < 60) return "Just now";
@@ -77,7 +77,7 @@ function Reply({ reply, onUpvote, onDownvote, onDelete }) {
                 className="reply"
                 onClick={isEditing ? handleSave : handleEdit}
               >
-                {isEditing ? "Save" : "Edit"}
+                {isEditing ? "Update" : "Edit"}
               </button>
             </>
           ) : null}

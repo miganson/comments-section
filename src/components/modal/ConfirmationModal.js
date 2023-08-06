@@ -1,5 +1,5 @@
 import React from "react";
-import "./ConfirmationModal.css"; // Assuming you have a CSS file for modal styles
+import "./ConfirmationModal.css";
 
 function ConfirmationModal({ show, onConfirm, onCancel }) {
   if (!show) return null;

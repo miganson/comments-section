@@ -15,7 +15,6 @@ function CommentSection() {
   const [newReply, setNewReply] = useState("");
   const [replyTo, setReplyTo] = useState(null);
 
-  // New state for modal and item to delete
   const [showModal, setShowModal] = useState(false);
   const [itemToDelete, setItemToDelete] = useState(null);
 
