@@ -8,7 +8,7 @@
   "comments": [
     {
       "id": 1,
-      "content": "...",
+      "content": "Aren't you a little short for a stormtrooper?",
       "createdAt": "2022-04-10T13:49:51.141Z",
       "score": 12,
       "user": {
@@ -21,7 +21,7 @@
     },
     {
       "id": 2,
-      "content": "...",
+      "content": "I will confront Vader, and I will convince him to turn back to the good side.",
       "createdAt": "2022-05-14T13:49:51.141Z",
       "score": 5,
       "user": {
@@ -33,7 +33,7 @@
       "replies": [
         {
           "id": 3,
-          "content": "...",
+          "content": "Your futile efforts are meaningless, young Skywalker. The power of the dark side is too strong to resist. #DarkSideDominance",
           "createdAt": "2022-06-01T13:49:51.141Z",
           "score": 4,
           "replyingTo": "lukeskywalker",

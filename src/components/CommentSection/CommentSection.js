@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef, createRef } from "react";
 import Comment from "../Comment/Comment";
 import Reply from "../Reply/Reply";
+import ConfirmationModal from "../modal/ConfirmationModal";
 import data from "../../data/data.json";
 import "./CommentSection.css";
 
@@ -12,34 +13,49 @@ function CommentSection() {
   const [comments, setComments] = useState(initialComments);
   const [newComment, setNewComment] = useState("");
   const [newReply, setNewReply] = useState("");
-  const [replyTo, setReplyTo] = useState(null); // Add this line
+  const [replyTo, setReplyTo] = useState(null);
 
-  // Create a ref for each comment reply input
+  // New state for modal and item to delete
+  const [showModal, setShowModal] = useState(false);
+  const [itemToDelete, setItemToDelete] = useState(null);
+
   const replyRefs = useRef(comments.map(() => createRef()));
 
   useEffect(() => {
-    // Save comments to localStorage whenever they change
     localStorage.setItem("comments", JSON.stringify(comments));
-
-    // update refs
     replyRefs.current = replyRefs.current.slice(0, comments.length);
   }, [comments]);
 
   const handleDeleteComment = (id) => {
-    setComments(comments.filter((comment) => comment.id !== id));
+    setShowModal(true);
+    setItemToDelete({ type: "comment", id });
   };
 
   const handleDeleteReply = (commentId, replyId) => {
-    setComments(
-      comments.map((comment) =>
-        comment.id === commentId
-          ? {
-              ...comment,
-              replies: comment.replies.filter((reply) => reply.id !== replyId),
-            }
-          : comment
-      )
-    );
+    setShowModal(true);
+    setItemToDelete({ type: "reply", commentId, replyId });
+  };
+
+  const confirmDelete = () => {
+    if (itemToDelete.type === "comment") {
+      setComments(comments.filter((comment) => comment.id !== itemToDelete.id));
+    } else if (itemToDelete.type === "reply") {
+      setComments(
+        comments.map((comment) =>
+          comment.id === itemToDelete.commentId
+            ? {
+                ...comment,
+                replies: comment.replies.filter(
+                  (reply) => reply.id !== itemToDelete.replyId
+                ),
+              }
+            : comment
+        )
+      );
+    }
+
+    setShowModal(false);
+    setItemToDelete(null);
   };
 
   const handleUpvoteComment = (id) => {
@@ -113,8 +129,8 @@ function CommentSection() {
           : comment
       )
     );
-    setReplyTo(null); // Clear replyTo after adding the reply
-    setNewReply(""); // Clear the reply input field after adding the reply
+    setReplyTo(null);
+    setNewReply("");
   };
 
   const handleAddComment = (content) => {
@@ -129,7 +145,7 @@ function CommentSection() {
         replies: [],
       },
     ]);
-    setNewComment(""); // Clear the input field after adding the comment
+    setNewComment("");
   };
 
   return (
@@ -140,10 +156,9 @@ function CommentSection() {
             comment={comment}
             onUpvote={() => handleUpvoteComment(comment.id)}
             onDownvote={() => handleDownvoteComment(comment.id)}
-            onDelete={handleDeleteComment}
+            onDelete={() => handleDeleteComment(comment.id)}
             onReply={() => {
-              setReplyTo(comment.id); // Set replyTo when the Reply button is clicked
-              // ... Existing code ...
+              setReplyTo(comment.id);
             }}
           />
           <div className="replies-container">
@@ -156,14 +171,14 @@ function CommentSection() {
                 onDelete={() => handleDeleteReply(comment.id, reply.id)}
               />
             ))}
-            {replyTo === comment.id && ( // Only show this if the Reply button was clicked for this comment
+            {replyTo === comment.id && (
               <>
                 <input
                   type="text"
                   placeholder="Write a reply..."
                   value={newReply}
                   onChange={(e) => setNewReply(e.target.value)}
-                  ref={replyRefs.current[index]} // use ref here
+                  ref={replyRefs.current[index]}
                 />
                 <button onClick={() => handleAddReply(comment.id, newReply)}>
                   Reply
@@ -180,10 +195,13 @@ function CommentSection() {
           value={newComment}
           onChange={(e) => setNewComment(e.target.value)}
         />
-        <button onClick={() => handleAddComment(newComment)}>
-          Post Comment
-        </button>
+        <button onClick={() => handleAddComment(newComment)}>Comment</button>
       </div>
+      <ConfirmationModal
+        show={showModal}
+        onConfirm={confirmDelete}
+        onCancel={() => setShowModal(false)}
+      />
     </div>
   );
 }
