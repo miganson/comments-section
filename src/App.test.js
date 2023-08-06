@@ -4,5 +4,5 @@ import App from './App';
 
 test('renders CommentSection', () => {
   render(<App />);
-  expect(screen.getByPlaceholderText(/Write a comment.../i)).toBeInTheDocument();
+  expect(screen.getByPlaceholderText(/Add a comment.../i)).toBeInTheDocument();
 });

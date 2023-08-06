@@ -4,9 +4,9 @@ import CommentSection from './CommentSection';
 
 test('handles adding new comment', () => {
   render(<CommentSection />);
-  const input = screen.getByPlaceholderText("Write a comment...");
+  const input = screen.getByPlaceholderText("Add a comment...");
   fireEvent.change(input, { target: { value: 'New Comment' } });
-  fireEvent.click(screen.getByText('Comment'));
+  fireEvent.click(screen.getByText('Send'));
 
   // Validate that new comment is added
   expect(screen.getByText('New Comment')).toBeInTheDocument();
