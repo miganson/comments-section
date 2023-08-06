@@ -172,31 +172,62 @@ function CommentSection() {
               />
             ))}
             {replyTo === comment.id && (
-              <>
-                <input
-                  type="text"
-                  placeholder="Write a reply..."
-                  value={newReply}
-                  onChange={(e) => setNewReply(e.target.value)}
-                  ref={replyRefs.current[index]}
-                />
-                <button onClick={() => handleAddReply(comment.id, newReply)}>
-                  Reply
-                </button>
-              </>
+              <div className="comment-input-container">
+                <div className="new-comment-container">
+                  <img
+                    src={
+                      data.currentUser.image
+                        ? data.currentUser.image.png
+                        : "avatars/anon.png"
+                    }
+                    alt={data.currentUser.username || "Anonymous"}
+                    className="comment-user-image"
+                  />
+                  <input
+                    type="text"
+                    placeholder="Write a reply..."
+                    value={newReply}
+                    onChange={(e) => setNewReply(e.target.value)}
+                    ref={replyRefs.current[index]}
+                  />
+                  <button
+                    className="comment-btn"
+                    onClick={() => handleAddReply(comment.id, newReply)}
+                  >
+                    Reply
+                  </button>
+                </div>
+              </div>
             )}
           </div>
         </div>
       ))}
-      <div className="new-comment-container">
-        <input
-          type="text"
-          placeholder="Write a comment..."
-          value={newComment}
-          onChange={(e) => setNewComment(e.target.value)}
-        />
-        <button onClick={() => handleAddComment(newComment)}>Comment</button>
+      <div className="comment-input-container">
+        <div className="new-comment-container">
+          <img
+            src={
+              data.currentUser.image
+                ? data.currentUser.image.png
+                : "avatars/anon.png"
+            }
+            alt={data.currentUser.username || "Anonymous"}
+            className="comment-user-image"
+          />
+          <input
+            type="text"
+            placeholder="Add a comment..."
+            value={newComment}
+            onChange={(e) => setNewComment(e.target.value)}
+          />
+          <button
+            className="comment-btn"
+            onClick={() => handleAddComment(newComment)}
+          >
+            Send
+          </button>
+        </div>
       </div>
+
       <ConfirmationModal
         show={showModal}
         onConfirm={confirmDelete}

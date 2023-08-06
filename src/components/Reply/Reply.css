@@ -1,5 +1,4 @@
 .reply {
-  border: 2px solid #ccc;
   display: flex;
   align-items: flex-start;
   margin-bottom: 20px;
@@ -25,6 +24,10 @@
 
 .reply .actions button.delete {
   right: 60px;
+}
+
+.vote-buttons {
+  padding: 5px;
 }
 
 .reply .vote-buttons div {
